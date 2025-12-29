@@ -15,5 +15,5 @@ jobs:
 
       - name: Read result
         run: |
-          RESULT=$(jq '.result' data.json)
+          RESULT=$(jq '.data.result.outcome.number' data.json)
           echo "🎰 Mega Roulette → $RESULT"
