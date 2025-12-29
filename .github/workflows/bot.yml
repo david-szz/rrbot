@@ -8,12 +8,24 @@ on:
 jobs:
   run:
     runs-on: ubuntu-latest
+
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
       - name: Fetch result
         run: |
           curl -s https://api-cs.casino.org/svc-evolution-game-events/api/megaroulette/latest > data.json
 
-      - name: Read result
+      - name: Run streak logic
         run: |
-          RESULT=$(jq '.data.result.outcome.number' data.json)
-          echo "🎰 Mega Roulette → $RESULT"
+          node logic.js
+
+      - name: Commit state update
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add state.json
+          git commit -m "update streak state" || echo "No changes"
+          git push
+
