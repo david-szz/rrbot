@@ -1,0 +1,19 @@
+name: Mega Roulette Bot
+
+on:
+  schedule:
+    - cron: "*/1 * * * *"
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch result
+        run: |
+          curl -s https://api-cs.casino.org/svc-evolution-game-events/api/megaroulette/latest > data.json
+
+      - name: Read result
+        run: |
+          RESULT=$(jq '.result' data.json)
+          echo "🎰 Mega Roulette → $RESULT"
