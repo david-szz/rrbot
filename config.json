@@ -1,0 +1,11 @@
+{
+  "threshold": 5,
+  "alerts": {
+    "even": true,
+    "odd": true,
+    "red": true,
+    "black": true,
+    "low": true,
+    "high": true
+  }
+}
