@@ -1,9 +1,11 @@
 import fs from "fs";
 
-const THRESHOLD = 5;
-
 const data = JSON.parse(fs.readFileSync("data.json", "utf8"));
 const state = JSON.parse(fs.readFileSync("state.json", "utf8"));
+const config = JSON.parse(fs.readFileSync("config.json", "utf8"));
+
+const THRESHOLD = config.threshold;
+const enabled = config.alerts;
 
 const number = data.data.result.outcome.number;
 const color = data.data.result.outcome.color.toLowerCase();
@@ -27,21 +29,32 @@ state.high = !isLow ? state.high + 1 : 0;
 
 state.lastNumber = number;
 
-// 🚨 DETECTOR DE RACHAS
+// 🚨 ALERTAS CONFIGURABLES
 const alerts = [];
 
-if (state.even >= THRESHOLD) alerts.push(`${state.even} PARES seguidos`);
-if (state.odd >= THRESHOLD) alerts.push(`${state.odd} IMPARES seguidos`);
-if (state.red >= THRESHOLD) alerts.push(`${state.red} ROJOS seguidos`);
-if (state.black >= THRESHOLD) alerts.push(`${state.black} NEGROS seguidos`);
-if (state.low >= THRESHOLD) alerts.push(`${state.low} BAJOS (1-18) seguidos`);
-if (state.high >= THRESHOLD) alerts.push(`${state.high} ALTOS (19-36) seguidos`);
+if (enabled.even && state.even >= THRESHOLD)
+  alerts.push(`${state.even} PARES seguidos`);
+
+if (enabled.odd && state.odd >= THRESHOLD)
+  alerts.push(`${state.odd} IMPARES seguidos`);
+
+if (enabled.red && state.red >= THRESHOLD)
+  alerts.push(`${state.red} ROJOS seguidos`);
+
+if (enabled.black && state.black >= THRESHOLD)
+  alerts.push(`${state.black} NEGROS seguidos`);
+
+if (enabled.low && state.low >= THRESHOLD)
+  alerts.push(`${state.low} BAJOS (1-18) seguidos`);
+
+if (enabled.high && state.high >= THRESHOLD)
+  alerts.push(`${state.high} ALTOS (19-36) seguidos`);
 
 console.log("🎰 Número:", number);
 console.log("Estado:", state);
 
 if (alerts.length > 0) {
-  console.log("🚨 RACHAS DETECTADAS:");
+  console.log("🚨 ALERTAS ACTIVAS:");
   alerts.forEach(a => console.log(" -", a));
 }
 
