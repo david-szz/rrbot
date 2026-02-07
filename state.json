@@ -1,9 +1,9 @@
 {
-  "even": 3,
+  "even": 4,
   "odd": 0,
   "red": 0,
-  "black": 2,
+  "black": 3,
   "low": 0,
-  "high": 2,
-  "lastNumber": 20
+  "high": 3,
+  "lastNumber": 26
 }
